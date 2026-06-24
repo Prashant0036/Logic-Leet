@@ -19,17 +19,16 @@ function ChatAi({problem}) {
     }, [messages]);
 
     const onSubmit = async (data) => {
-        
-        setMessages(prev => [...prev, { role: 'user', parts:[{text: data.message}] }]);
-        // prev : means old value of messages state
-        // adding new object in messages state, of user's message
+        const newUserMessage = { role: 'user', parts:[{text: data.message}] };
+        const updatedMessages = [...messages, newUserMessage];
+        setMessages(updatedMessages);
         reset();
 
         try {
             // console.log("Before API Call");
             
             const response = await axiosClient.post("/ai/chat", {
-                messages:messages,
+                messages: updatedMessages,
                 title:problem.title,
                 description:problem.description,
                 testCases: problem.visibleTestCases,

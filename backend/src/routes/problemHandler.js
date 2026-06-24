@@ -1,7 +1,7 @@
 const express = require('express');
 const adminMiddleware = require('../middleware/adminMiddleware');
 const userMiddleware = require("../middleware/userMiddleware");
-const {createProblem,getProblemById,updateProblem,getAllProblem,deleteProblem,solvedProblemsByUser,userSubmissionsOfAnyProblem,getProblemById_forAdmin} = require('../controllers/userProblem');
+const {createProblem,getProblemById,updateProblem,getAllProblem,deleteProblem,solvedProblemsByUser,userSubmissionsOfAnyProblem,getProblemById_forAdmin,getProblemStats} = require('../controllers/userProblem');
 const problemRouter = express.Router();
 
 
@@ -9,6 +9,8 @@ const problemRouter = express.Router();
 // Create [Admin Access]
 problemRouter.post("/create",adminMiddleware, createProblem);
 
+// Fetch problem stats (public)
+problemRouter.get("/stats", getProblemStats);
 
 // // Fetch all problems
 problemRouter.get("/allproblems", userMiddleware,getAllProblem);

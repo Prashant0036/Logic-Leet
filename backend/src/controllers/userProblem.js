@@ -376,4 +376,38 @@ const userSubmissionsOfAnyProblem = async(req,res)=>{
 
 }
 
-module.exports = {createProblem,getProblemById,updateProblem,getAllProblem,deleteProblem,solvedProblemsByUser,userSubmissionsOfAnyProblem,getProblemById_forAdmin};
+const getProblemStats = async (req, res) => {
+    try {
+        const problems = await Problem.find({}).select('difficulty tags');
+        
+        const totalProblems = problems.length;
+        
+        const difficultyCounts = {
+            Easy: 0,
+            Medium: 0,
+            Hard: 0
+        };
+        
+        const tagCounts = {};
+
+        problems.forEach(p => {
+            if (p.difficulty && difficultyCounts[p.difficulty] !== undefined) {
+                difficultyCounts[p.difficulty]++;
+            }
+            if (p.tags) {
+                const tag = p.tags.trim();
+                tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+            }
+        });
+
+        res.status(200).json({
+            totalProblems,
+            difficultyCounts,
+            tagCounts
+        });
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};
+
+module.exports = {createProblem,getProblemById,updateProblem,getAllProblem,deleteProblem,solvedProblemsByUser,userSubmissionsOfAnyProblem,getProblemById_forAdmin,getProblemStats};
