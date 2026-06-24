@@ -5,7 +5,7 @@ COPY ./frontend /app
 # copy frontend folder in app folder
 
 WORKDIR /app
-# now we did 
+# now we did cd app
 
 RUN npm install
 
